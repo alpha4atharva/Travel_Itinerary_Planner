@@ -64,17 +64,17 @@ def create_logistics_task(logistics_manager) -> Task:
             "   - Hotel ({num_days} nights × nightly rate)\n"
             "   - Daily expenses ({num_days} days × daily cost)\n"
             "   - TOTAL\n\n"
-            "5. **Budget Check:** Compare the total against the budget of ${budget}.\n"
+            "5. **Budget Check:** Compare the total against the budget of ₹{budget}.\n"
             "   - If over budget, suggest specific ways to cut costs.\n"
             "   - If under budget, mention how much is left for shopping/extras."
         ),
         expected_output=(
             "A detailed cost breakdown in markdown format:\n"
-            "- **Flight Estimate:** $XXX (round-trip)\n"
-            "- **Hotel Estimate:** $XXX/night × {num_days} nights = $XXX\n"
-            "- **Daily Expenses:** $XXX/day × {num_days} days = $XXX\n"
-            "- **TOTAL ESTIMATED COST:** $XXX\n"
-            "- **Budget Remaining:** $XXX\n"
+            "- **Flight Estimate:** ₹XXX (round-trip)\n"
+            "- **Hotel Estimate:** ₹XXX/night × {num_days} nights = ₹XXX\n"
+            "- **Daily Expenses:** ₹XXX/day × {num_days} days = ₹XXX\n"
+            "- **TOTAL ESTIMATED COST:** ₹XXX\n"
+            "- **Budget Remaining:** ₹XXX\n"
             "- **Budget Status:** ✅ Within Budget / ⚠️ Over Budget\n"
             "- **Suggestions** (if over budget)"
         ),

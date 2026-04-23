@@ -10,17 +10,27 @@ Agents:
 import os
 from crewai import Agent, LLM
 from crewai_tools import SerperDevTool
+from crewai.tools import tool
 
 # ── Tool Setup ───────────────────────────────────────────────────────────────
 # SerperDevTool allows agents to perform Google searches.
 # Requires SERPER_API_KEY to be set in the environment / .env file.
 search_tool = SerperDevTool()
 
+@tool("CalculatorTool")
+def calculate(expression: str) -> str:
+    """Useful for performing mathematical calculations. Use this for adding up flights, hotels, and daily expenses. Input should be a mathematical expression like '2000 + 1500 * 3'."""
+    try:
+        # Safe eval using limited locals/globals to prevent arbitrary code execution
+        return str(eval(expression, {"__builtins__": {}}, {}))
+    except Exception as e:
+        return f"Error calculating: {e}"
+
 # ── LLM Setup ────────────────────────────────────────────────────────────────
-# Using Groq's Llama 3.3 70B model (fast and free tier available).
-# Requires GROQ_API_KEY to be set in the environment / .env file.
-groq_llm = LLM(
-    model="groq/llama-3.3-70b-versatile",
+# Using Gemini 2.5 Flash
+# Requires GEMINI_API_KEY to be set in the environment / .env file.
+gemini_llm = LLM(
+    model="gemini/gemini-2.5-flash",
     temperature=0.7,
 )
 
@@ -48,9 +58,10 @@ def create_travel_researcher() -> Agent:
             "off-the-beaten-path experiences."
         ),
         tools=[search_tool],
-        llm=groq_llm,
+        llm=gemini_llm,
         verbose=True,
         allow_delegation=False,
+        max_rpm=3,
     )
 
 
@@ -65,8 +76,8 @@ def create_logistics_manager() -> Agent:
         goal=(
             "Find estimated round-trip flight costs from {origin} to {destination}, "
             "and average nightly hotel prices in {destination} for {num_days} days. "
-            "Calculate the total estimated cost for travel and accommodation, and "
-            "verify that it stays within the total budget of ${budget}. "
+            "Calculate the total estimated cost for travel and accommodation using the CalculatorTool, and "
+            "verify that it stays within the total budget of ₹{budget}. "
             "If the budget is tight, suggest cheaper alternatives."
         ),
         backstory=(
@@ -75,10 +86,11 @@ def create_logistics_manager() -> Agent:
             "You excel at finding budget-friendly flights, comparing hotel prices, "
             "and creating realistic cost breakdowns. You never let a trip go over budget."
         ),
-        tools=[search_tool],
-        llm=groq_llm,
+        tools=[search_tool, calculate],
+        llm=gemini_llm,
         verbose=True,
         allow_delegation=False,
+        max_rpm=3,
     )
 
 
@@ -94,7 +106,7 @@ def create_itinerary_compiler() -> Agent:
             "Compile all the research about {destination} and the logistics/budget "
             "information into a cohesive, detailed, day-by-day travel itinerary "
             "for {num_days} days. The itinerary must include a clear cost breakdown "
-            "and stay within the budget of ${budget}."
+            "and stay within the budget of ₹{budget}."
         ),
         backstory=(
             "You are an expert travel agent renowned for creating beautiful, "
@@ -103,8 +115,9 @@ def create_itinerary_compiler() -> Agent:
             "schedule. Your itineraries are so well-organized that travelers never "
             "feel rushed or lost."
         ),
-        tools=[],  # No tools needed — works from the other agents' outputs.
-        llm=groq_llm,
+        tools=[calculate],  # Give compiler access to calculator just in case
+        llm=gemini_llm,
         verbose=True,
         allow_delegation=False,
+        max_rpm=3,
     )

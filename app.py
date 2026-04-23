@@ -105,12 +105,12 @@ with st.sidebar:
     )
 
     budget = st.number_input(
-        "💰 Total Budget (USD)",
-        min_value=100,
-        max_value=50000,
-        value=2000,
-        step=100,
-        help="Your total trip budget including flights, hotels, food, and activities.",
+        "💰 Total Budget (INR)",
+        min_value=5000,
+        max_value=1000000,
+        value=50000,
+        step=5000,
+        help="Your total trip budget in Rupees including flights, hotels, food, and activities.",
     )
 
     num_days = st.number_input(
@@ -138,7 +138,7 @@ if generate_btn:
         st.info(
             f"🤖 **Crew assembled!** Three AI agents are now planning your "
             f"{num_days}-day trip from **{origin}** to **{destination}** "
-            f"with a budget of **${budget:,}**."
+            f"with a budget of **₹{budget:,}**."
         )
 
         with st.spinner("⏳ Agents are researching, calculating, and compiling your itinerary... This may take 1-2 minutes."):
@@ -166,7 +166,7 @@ if generate_btn:
                 st.error(f"❌ Something went wrong: {e}")
                 st.info(
                     "💡 **Troubleshooting tips:**\n"
-                    "- Make sure your `GEMINI_API_KEY` and `SERPER_API_KEY` are set in the `.env` file.\n"
+                    "- Make sure your `GROQ_API_KEY` and `SERPER_API_KEY` are set in the `.env` file.\n"
                     "- Check that you have an active internet connection.\n"
                     "- Try reducing the number of days if the request is too complex."
                 )
