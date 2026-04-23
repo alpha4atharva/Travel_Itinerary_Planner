@@ -52,31 +52,32 @@ def create_logistics_task(logistics_manager) -> Task:
     """
     return Task(
         description=(
-            "Find realistic cost estimates for a trip from {origin} to {destination} "
+            "Find realistic and SPECIFIC cost estimates for a trip from {origin} to {destination} "
             "for {num_days} days.\n\n"
             "You must research and provide:\n"
-            "1. **Flights:** Average round-trip flight cost from {origin} to {destination}.\n"
-            "2. **Hotels:** Average nightly hotel rate in {destination} "
-            "(search for mid-range options).\n"
+            "1. **Travel (Flights/Trains/Buses):** Find real travel options from {origin} to {destination}. "
+            "You MUST provide the specific Airline/Train name and the estimated price. "
+            "Do NOT just say 'train travel' or 'average flight'. Provide specific names.\n"
+            "2. **Accommodation:** Find 2-3 specific hotels or guesthouses in {destination} that fit the budget. "
+            "You MUST provide the ACTUAL NAME of the hotel and its nightly rate. "
+            "Do NOT just say 'budget guesthouse'.\n"
             "3. **Daily Expenses:** Estimated daily food and local transport costs.\n"
             "4. **Total Cost Calculation:**\n"
-            "   - Flights (round-trip)\n"
+            "   - Travel costs\n"
             "   - Hotel ({num_days} nights × nightly rate)\n"
             "   - Daily expenses ({num_days} days × daily cost)\n"
             "   - TOTAL\n\n"
             "5. **Budget Check:** Compare the total against the budget of ₹{budget}.\n"
-            "   - If over budget, suggest specific ways to cut costs.\n"
-            "   - If under budget, mention how much is left for shopping/extras."
+            "   - If over budget, suggest specific ways to cut costs."
         ),
         expected_output=(
             "A detailed cost breakdown in markdown format:\n"
-            "- **Flight Estimate:** ₹XXX (round-trip)\n"
-            "- **Hotel Estimate:** ₹XXX/night × {num_days} nights = ₹XXX\n"
+            "- **Travel Options:** [Specific Airline/Train Name] - ₹XXX\n"
+            "- **Recommended Hotel:** [Specific Hotel Name] - ₹XXX/night × {num_days} nights = ₹XXX\n"
             "- **Daily Expenses:** ₹XXX/day × {num_days} days = ₹XXX\n"
             "- **TOTAL ESTIMATED COST:** ₹XXX\n"
             "- **Budget Remaining:** ₹XXX\n"
-            "- **Budget Status:** ✅ Within Budget / ⚠️ Over Budget\n"
-            "- **Suggestions** (if over budget)"
+            "- **Budget Status:** ✅ Within Budget / ⚠️ Over Budget"
         ),
         agent=logistics_manager,
     )

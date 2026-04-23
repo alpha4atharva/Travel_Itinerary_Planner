@@ -74,8 +74,9 @@ def create_logistics_manager() -> Agent:
     return Agent(
         role="Travel Logistics Coordinator",
         goal=(
-            "Find estimated round-trip flight costs from {origin} to {destination}, "
-            "and average nightly hotel prices in {destination} for {num_days} days. "
+            "Find specific travel options (flights, trains, or buses) from {origin} to {destination}. "
+            "Find 2-3 specific hotels in {destination} for {num_days} days. "
+            "You MUST provide the actual names of the airlines/trains and hotels. Do not use generic averages. "
             "Calculate the total estimated cost for travel and accommodation using the CalculatorTool, and "
             "verify that it stays within the total budget of ₹{budget}. "
             "If the budget is tight, suggest cheaper alternatives."
