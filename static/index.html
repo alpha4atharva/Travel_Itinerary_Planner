@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Travel Itinerary Planner</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <header class="hero">
+            <h1>🌍 AI Travel Itinerary Planner</h1>
+            <p>Enter your trip details below and get a personalized, budget-aware itinerary in minutes.</p>
+        </header>
+
+        <!-- Input Form -->
+        <div class="input-card">
+            <form id="travel-form">
+                <!-- Row 1 -->
+                <div class="form-row">
+                    <div class="form-group flex-2">
+                        <label>🏠 Origin City</label>
+                        <input type="text" id="origin" placeholder="e.g., Mumbai, India" required>
+                    </div>
+                    <div class="form-group flex-2">
+                        <label>🎯 Destination</label>
+                        <input type="text" id="destination" placeholder="e.g., Paris, France" required>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>💱 Currency</label>
+                        <select id="currency">
+                            <option value="INR|₹">INR (₹)</option>
+                            <option value="USD|$">USD ($)</option>
+                            <option value="EUR|€">EUR (€)</option>
+                            <option value="GBP|£">GBP (£)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label id="budget-label">💰 Budget / Person (₹)</label>
+                        <input type="number" id="budget" min="0" value="50000" step="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label>👥 Travelers</label>
+                        <input type="number" id="num_persons" min="1" max="20" value="1" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>🛫 Start Date</label>
+                        <input type="date" id="start_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>📅 Days</label>
+                        <input type="number" id="num_days" min="1" max="30" value="5" step="1" required>
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label>🎯 Travel Interests (Hold Ctrl/Cmd to select multiple)</label>
+                        <select id="interests" multiple required size="4">
+                            <option value="History & Culture" selected>History & Culture</option>
+                            <option value="Food & Drink" selected>Food & Drink</option>
+                            <option value="Adventure & Outdoors">Adventure & Outdoors</option>
+                            <option value="Nightlife & Entertainment">Nightlife & Entertainment</option>
+                            <option value="Nature & Wildlife">Nature & Wildlife</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Art & Museums">Art & Museums</option>
+                            <option value="Relaxation & Wellness">Relaxation & Wellness</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="button-container">
+                    <button type="submit" id="generate-btn">🚀 Generate My Itinerary</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Features (shown initially) -->
+        <div id="features-section" class="features-grid">
+            <div class="feature-card">
+                <div class="icon">🔍</div>
+                <h4>Smart Research</h4>
+                <p>AI searches the web for attractions, restaurants, and local tips tailored to your interests.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">💰</div>
+                <h4>Budget Aware</h4>
+                <p>Compares multiple flight, hotel, and package options across budget tiers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📋</div>
+                <h4>Day-by-Day Plan</h4>
+                <p>Get a detailed itinerary with morning, afternoon, and evening activities.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">💱</div>
+                <h4>Dual Currency</h4>
+                <p>All prices shown in your currency and the destination's local currency.</p>
+            </div>
+        </div>
+
+        <!-- Status Box -->
+        <div id="status-box" class="status-box hidden">
+            <!-- Dynamic content injected here -->
+        </div>
+
+        <!-- Result Container -->
+        <div id="result-container" class="hidden">
+            <div class="result-header">
+                <h2>✅ Your Itinerary is Ready!</h2>
+            </div>
+            <div id="itinerary-content" class="markdown-body">
+                <!-- Markdown renders here -->
+            </div>
+            <div class="action-buttons">
+                <button id="download-btn" class="btn-secondary">📥 Download as Markdown</button>
+                <button id="clear-btn" class="btn-outline">🗑️ Clear & Start Over</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

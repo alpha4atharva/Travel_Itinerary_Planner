@@ -11,6 +11,7 @@ import os
 from crewai import Agent, LLM
 from crewai_tools import SerperDevTool
 from crewai.tools import tool
+from backend.tools import search_flights, search_hotels
 
 # ── Tool Setup ───────────────────────────────────────────────────────────────
 # SerperDevTool allows agents to perform Google searches.
@@ -76,9 +77,9 @@ def create_logistics_manager() -> Agent:
     return Agent(
         role="Travel Logistics Coordinator",
         goal=(
-            "Find AT LEAST 3 different ROUND-TRIP travel options (flights, trains, or buses) from {origin} to {destination} AND back from {destination} to {origin} for the travel date {start_date}. "
-            "For each option, provide BOTH the outbound and return journey with specific prices. "
-            "Find AT LEAST 3 specific hotels in {destination} across Budget, Mid-Range, and Premium tiers for {num_days} days. "
+            "Find 5-10 different ONE-WAY travel options (flights, trains, or buses) from {origin} to {destination} for the travel date {start_date}. "
+            "For each option, provide specific prices. "
+            "Find 5-10 specific hotels in {destination} across Budget, Mid-Range, and Premium tiers for {num_days} days. "
             "The trip is for {num_persons} person(s). Budget is {currency_symbol}{budget_per_person} per person (Total: {currency_symbol}{total_budget}). "
             "You MUST provide the actual names of the airlines/trains and hotels with specific prices. Do not use generic averages. "
             "Present all options in comparison tables so the traveler can choose. "
@@ -94,7 +95,7 @@ def create_logistics_manager() -> Agent:
             "You excel at finding budget-friendly flights, comparing hotel prices, "
             "and creating realistic cost breakdowns. You never let a trip go over budget."
         ),
-        tools=[search_tool, calculate],
+        tools=[search_flights, search_hotels, search_tool, calculate],
         llm=gemini_llm,
         verbose=True,
         allow_delegation=False,
