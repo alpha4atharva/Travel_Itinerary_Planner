@@ -30,7 +30,7 @@ def calculate(expression: str) -> str:
 # Using Gemini 2.5 Flash
 # Requires GEMINI_API_KEY to be set in the environment / .env file.
 gemini_llm = LLM(
-    model="gemini/gemini-2.5-flash",
+    model="gemini/gemini-3.1-flash-lite-preview",
     temperature=0.7,
 )
 
@@ -74,7 +74,7 @@ def create_logistics_manager() -> Agent:
     return Agent(
         role="Travel Logistics Coordinator",
         goal=(
-            "Find specific travel options (flights, trains, or buses) from {origin} to {destination}. "
+            "Find specific travel options (flights, trains, or buses) from {origin} to {destination} for the travel date {start_date}. "
             "Find 2-3 specific hotels in {destination} for {num_days} days. "
             "You MUST provide the actual names of the airlines/trains and hotels. Do not use generic averages. "
             "Calculate the total estimated cost for travel and accommodation using the CalculatorTool, and "

@@ -27,6 +27,7 @@ if __name__ == "__main__":
     origin = "Mumbai, India"
     destination = "Tokyo, Japan"
     budget = 2500
+    start_date = "2026-05-10"
     num_days = 5
 
     print(f"\n📍 Origin:      {origin}")
@@ -39,6 +40,7 @@ if __name__ == "__main__":
         origin=origin,
         destination=destination,
         budget=budget,
+        start_date=start_date,
         num_days=num_days,
     )
 

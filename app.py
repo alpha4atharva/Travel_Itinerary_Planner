@@ -6,6 +6,7 @@ Run with:
 """
 
 import streamlit as st
+import datetime
 from dotenv import load_dotenv
 load_dotenv()  # Load API keys from .env
 
@@ -113,6 +114,12 @@ with st.sidebar:
         help="Your total trip budget in Rupees including flights, hotels, food, and activities.",
     )
 
+    start_date = st.date_input(
+        "🛫 Start Date",
+        min_value=datetime.date.today(),
+        help="When does your trip start?",
+    )
+
     num_days = st.number_input(
         "📅 Number of Days",
         min_value=1,
@@ -147,6 +154,7 @@ if generate_btn:
                     origin=origin.strip(),
                     destination=destination.strip(),
                     budget=int(budget),
+                    start_date=start_date.strftime("%Y-%m-%d"),
                     num_days=int(num_days),
                 )
 

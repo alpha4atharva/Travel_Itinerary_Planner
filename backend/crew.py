@@ -18,7 +18,7 @@ from backend.tasks import (
 )
 
 
-def run_crew(origin: str, destination: str, budget: int, num_days: int) -> str:
+def run_crew(origin: str, destination: str, budget: int, start_date: str, num_days: int) -> str:
     """Assembles and kicks off the Travel Planner crew.
 
     Args:
@@ -59,6 +59,7 @@ def run_crew(origin: str, destination: str, budget: int, num_days: int) -> str:
             "origin": origin,
             "destination": destination,
             "budget": budget,
+            "start_date": start_date,
             "num_days": num_days,
         }
     )

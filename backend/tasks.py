@@ -28,7 +28,7 @@ def create_research_task(researcher) -> Task:
             "1. Top 5-7 must-visit attractions or landmarks.\n"
             "2. 3-5 highly-rated restaurants or food experiences (with cuisine type).\n"
             "3. Local customs or travel tips (e.g., tipping culture, transport, safety).\n"
-            "4. Current weather/season conditions for the travel dates.\n"
+            "4. Current weather/season conditions for the travel dates starting on {start_date}.\n"
             "5. Any free or budget-friendly activities available.\n\n"
             "Focus on making the recommendations practical and actionable."
         ),
@@ -53,7 +53,7 @@ def create_logistics_task(logistics_manager) -> Task:
     return Task(
         description=(
             "Find realistic and SPECIFIC cost estimates for a trip from {origin} to {destination} "
-            "for {num_days} days.\n\n"
+            "starting on {start_date} for {num_days} days.\n\n"
             "You must research and provide:\n"
             "1. **Travel (Flights/Trains/Buses):** Find real travel options from {origin} to {destination}. "
             "You MUST provide the specific Airline/Train name and the estimated price. "
@@ -100,8 +100,7 @@ def create_compilation_task(compiler, context_tasks: list) -> Task:
             "3. Have a section for each day (Day 1, Day 2, etc.) with:\n"
             "   - Morning, Afternoon, and Evening activities.\n"
             "   - Restaurant/food suggestions for each meal.\n"
-            "   - Estimated costs for each activity.\n"
-            "4. End with **Packing Tips** and **Important Notes**.\n\n"
+            "   - Estimated costs for each activity.\n\n"
             "Format the entire output as clean, well-structured Markdown."
         ),
         expected_output=(
@@ -109,9 +108,7 @@ def create_compilation_task(compiler, context_tasks: list) -> Task:
             "- Trip Summary header\n"
             "- Cost Breakdown table\n"
             "- Day-by-day schedule (Day 1 through Day {num_days})\n"
-            "- Each day has Morning / Afternoon / Evening sections\n"
-            "- Packing Tips section\n"
-            "- Important Notes section"
+            "- Each day has Morning / Afternoon / Evening sections"
         ),
         agent=compiler,
         context=context_tasks,  # This agent reads the outputs of the previous tasks.
