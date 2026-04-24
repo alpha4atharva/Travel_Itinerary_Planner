@@ -27,6 +27,7 @@ if __name__ == "__main__":
     origin = "Mumbai, India"
     destination = "Tokyo, Japan"
     budget = 50000
+    num_persons = 2
     currency = "INR"
     currency_symbol = "₹"
     start_date = "2026-05-10"
@@ -35,7 +36,8 @@ if __name__ == "__main__":
 
     print(f"\n📍 Origin:      {origin}")
     print(f"🎯 Destination: {destination}")
-    print(f"💰 Budget:      {currency_symbol}{budget}")
+    print(f"💰 Budget:      {currency_symbol}{budget} per person")
+    print(f"👥 Travelers:   {num_persons}")
     print(f"💱 Currency:    {currency}")
     print(f"🛫 Start Date:  {start_date}")
     print(f"📅 Duration:    {num_days} days")
@@ -46,6 +48,7 @@ if __name__ == "__main__":
         origin=origin,
         destination=destination,
         budget=budget,
+        num_persons=num_persons,
         currency=currency,
         currency_symbol=currency_symbol,
         start_date=start_date,

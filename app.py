@@ -122,12 +122,21 @@ with st.sidebar:
     currency = CURRENCY_OPTIONS[currency_label]
 
     budget = st.number_input(
-        f"💰 Total Budget ({currency['code']})",
+        f"💰 Budget per Person ({currency['code']})",
         min_value=100,
         max_value=10000000,
         value=50000 if currency["code"] == "INR" else 2500,
         step=500 if currency["code"] == "INR" else 100,
-        help=f"Your total trip budget in {currency['code']} including flights, hotels, food, and activities.",
+        help=f"Your trip budget PER PERSON in {currency['code']} including flights, hotels, food, and activities.",
+    )
+
+    num_persons = st.number_input(
+        "👥 Number of Travelers",
+        min_value=1,
+        max_value=20,
+        value=1,
+        step=1,
+        help="How many people are traveling? Budget is per person.",
     )
 
     start_date = st.date_input(
@@ -174,10 +183,13 @@ if generate_btn:
         st.error("⚠️ Please enter your destination.")
     else:
         # Show agent status
+        total_budget = int(budget) * int(num_persons)
         st.info(
             f"🤖 **Crew assembled!** Three AI agents are now planning your "
             f"{num_days}-day trip from **{origin}** to **{destination}** "
-            f"with a budget of **{currency['symbol']}{budget:,}**."
+            f"for **{num_persons} traveler{'s' if num_persons > 1 else ''}** "
+            f"with a budget of **{currency['symbol']}{budget:,} per person** "
+            f"(Total: **{currency['symbol']}{total_budget:,}**)."
         )
 
         with st.spinner("⏳ Agents are researching, calculating, and compiling your itinerary... This may take 1-2 minutes."):
@@ -186,6 +198,7 @@ if generate_btn:
                     origin=origin.strip(),
                     destination=destination.strip(),
                     budget=int(budget),
+                    num_persons=int(num_persons),
                     currency=currency["code"],
                     currency_symbol=currency["symbol"],
                     start_date=start_date.strftime("%Y-%m-%d"),

@@ -22,6 +22,7 @@ def run_crew(
     origin: str,
     destination: str,
     budget: int,
+    num_persons: int,
     currency: str,
     currency_symbol: str,
     start_date: str,
@@ -33,7 +34,8 @@ def run_crew(
     Args:
         origin:          The city/airport the user is traveling from.
         destination:     The travel destination.
-        budget:          Total trip budget in the chosen currency.
+        budget:          Trip budget PER PERSON in the chosen currency.
+        num_persons:     Number of travelers.
         currency:        Currency code (e.g., INR, USD, EUR, GBP).
         currency_symbol: Currency symbol (e.g., ₹, $, €, £).
         start_date:      Trip start date in YYYY-MM-DD format.
@@ -69,11 +71,14 @@ def run_crew(
     # ── Step 4: Kick Off ──────────────────────────────────────────────────
     # The input dict values replace {origin}, {destination}, etc. in the
     # agent goals and task descriptions.
+    total_budget = budget * num_persons
     result = crew.kickoff(
         inputs={
             "origin": origin,
             "destination": destination,
-            "budget": budget,
+            "budget_per_person": budget,
+            "num_persons": num_persons,
+            "total_budget": total_budget,
             "currency": currency,
             "currency_symbol": currency_symbol,
             "start_date": start_date,
@@ -83,3 +88,4 @@ def run_crew(
     )
 
     return str(result)
+

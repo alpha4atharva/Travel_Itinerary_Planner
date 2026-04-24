@@ -76,13 +76,17 @@ def create_logistics_manager() -> Agent:
     return Agent(
         role="Travel Logistics Coordinator",
         goal=(
-            "Find specific travel options (flights, trains, or buses) from {origin} to {destination} for the travel date {start_date}. "
-            "Find 2-3 specific hotels in {destination} for {num_days} days. "
-            "You MUST provide the actual names of the airlines/trains and hotels. Do not use generic averages. "
-            "Calculate the total estimated cost for travel and accommodation using the CalculatorTool, and "
-            "verify that it stays within the total budget of {currency_symbol}{budget}. "
-            "All prices must be in {currency} ({currency_symbol}). "
-            "If the budget is tight, suggest cheaper alternatives."
+            "Find AT LEAST 3 different ROUND-TRIP travel options (flights, trains, or buses) from {origin} to {destination} AND back from {destination} to {origin} for the travel date {start_date}. "
+            "For each option, provide BOTH the outbound and return journey with specific prices. "
+            "Find AT LEAST 3 specific hotels in {destination} across Budget, Mid-Range, and Premium tiers for {num_days} days. "
+            "The trip is for {num_persons} person(s). Budget is {currency_symbol}{budget_per_person} per person (Total: {currency_symbol}{total_budget}). "
+            "You MUST provide the actual names of the airlines/trains and hotels with specific prices. Do not use generic averages. "
+            "Present all options in comparison tables so the traveler can choose. "
+            "Calculate the total estimated cost for 3 packages (Budget, Mid-Range, Premium) for ALL {num_persons} person(s) using the CalculatorTool. "
+            "The flight cost in each package MUST include BOTH outbound AND return tickets. "
+            "Verify which packages stay within the total budget of {currency_symbol}{total_budget}. "
+            "All prices must be shown in BOTH the user's currency {currency} ({currency_symbol}) AND the destination country's local currency. "
+            "If the user's currency and the destination's local currency are the same, show only one. "
         ),
         backstory=(
             "You are a meticulous financial planner and travel deal expert. "
@@ -109,8 +113,10 @@ def create_itinerary_compiler() -> Agent:
         goal=(
             "Compile all the research about {destination} and the logistics/budget "
             "information into a cohesive, detailed, day-by-day travel itinerary "
-            "for {num_days} days starting on {start_date}. The itinerary must include a clear cost breakdown "
-            "in {currency} ({currency_symbol}) and stay within the budget of {currency_symbol}{budget}."
+            "for {num_days} days starting on {start_date} for {num_persons} person(s). "
+            "The itinerary must include a clear cost breakdown "
+            "showing prices in BOTH {currency} ({currency_symbol}) and the destination's local currency (if different). "
+            "Budget is {currency_symbol}{budget_per_person} per person (Total: {currency_symbol}{total_budget})."
         ),
         backstory=(
             "You are an expert travel agent renowned for creating beautiful, "
