@@ -18,14 +18,27 @@ from backend.tasks import (
 )
 
 
-def run_crew(origin: str, destination: str, budget: int, start_date: str, num_days: int) -> str:
+def run_crew(
+    origin: str,
+    destination: str,
+    budget: int,
+    currency: str,
+    currency_symbol: str,
+    start_date: str,
+    num_days: int,
+    interests: str = "General sightseeing",
+) -> str:
     """Assembles and kicks off the Travel Planner crew.
 
     Args:
-        origin:      The city/airport the user is traveling from.
-        destination: The travel destination.
-        budget:      Total trip budget in USD.
-        num_days:    Number of days for the trip.
+        origin:          The city/airport the user is traveling from.
+        destination:     The travel destination.
+        budget:          Total trip budget in the chosen currency.
+        currency:        Currency code (e.g., INR, USD, EUR, GBP).
+        currency_symbol: Currency symbol (e.g., ₹, $, €, £).
+        start_date:      Trip start date in YYYY-MM-DD format.
+        num_days:        Number of days for the trip.
+        interests:       Comma-separated travel interests.
 
     Returns:
         The final itinerary as a Markdown-formatted string.
@@ -36,6 +49,8 @@ def run_crew(origin: str, destination: str, budget: int, start_date: str, num_da
     compiler = create_itinerary_compiler()
 
     # ── Step 2: Create Tasks ──────────────────────────────────────────────
+    # Research and Logistics tasks run in parallel (async_execution=True)
+    # to cut total wait time nearly in half.
     research_task = create_research_task(researcher)
     logistics_task = create_logistics_task(logistics_manager)
     compilation_task = create_compilation_task(
@@ -59,8 +74,11 @@ def run_crew(origin: str, destination: str, budget: int, start_date: str, num_da
             "origin": origin,
             "destination": destination,
             "budget": budget,
+            "currency": currency,
+            "currency_symbol": currency_symbol,
             "start_date": start_date,
             "num_days": num_days,
+            "interests": interests,
         }
     )
 

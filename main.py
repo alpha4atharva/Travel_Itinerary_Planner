@@ -26,25 +26,35 @@ if __name__ == "__main__":
     # ── Sample Inputs (change these to test) ──────────────────────────────
     origin = "Mumbai, India"
     destination = "Tokyo, Japan"
-    budget = 2500
+    budget = 50000
+    currency = "INR"
+    currency_symbol = "₹"
     start_date = "2026-05-10"
     num_days = 5
+    interests = "History & Culture, Food & Drink"
 
     print(f"\n📍 Origin:      {origin}")
     print(f"🎯 Destination: {destination}")
-    print(f"💰 Budget:      ${budget}")
+    print(f"💰 Budget:      {currency_symbol}{budget}")
+    print(f"💱 Currency:    {currency}")
+    print(f"🛫 Start Date:  {start_date}")
     print(f"📅 Duration:    {num_days} days")
+    print(f"🎯 Interests:   {interests}")
     print("\n⏳ Agents are working... This may take 1-2 minutes.\n")
 
     result = run_crew(
         origin=origin,
         destination=destination,
         budget=budget,
+        currency=currency,
+        currency_symbol=currency_symbol,
         start_date=start_date,
         num_days=num_days,
+        interests=interests,
     )
 
     print("\n" + "=" * 60)
     print("  ✅ FINAL ITINERARY")
     print("=" * 60)
     print(result)
+

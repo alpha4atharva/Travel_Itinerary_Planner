@@ -83,10 +83,18 @@ st.markdown("""
 st.markdown("""
 <div class="main-header">
     <h1>🌍 AI Travel Itinerary Planner</h1>
-    <p>Powered by CrewAI Multi-Agent System & Google Gemini</p>
+    <p>Powered by CrewAI Multi-Agent System &amp; Google Gemini</p>
 </div>
 """, unsafe_allow_html=True)
 
+
+# ── Currency Config ───────────────────────────────────────────────────────────
+CURRENCY_OPTIONS = {
+    "INR (₹)": {"code": "INR", "symbol": "₹"},
+    "USD ($)": {"code": "USD", "symbol": "$"},
+    "EUR (€)": {"code": "EUR", "symbol": "€"},
+    "GBP (£)": {"code": "GBP", "symbol": "£"},
+}
 
 # ── Sidebar — User Inputs ────────────────────────────────────────────────────
 with st.sidebar:
@@ -105,13 +113,21 @@ with st.sidebar:
         help="Where do you want to go?",
     )
 
+    currency_label = st.selectbox(
+        "💱 Currency",
+        options=list(CURRENCY_OPTIONS.keys()),
+        index=0,
+        help="Select your preferred currency for the budget and cost breakdown.",
+    )
+    currency = CURRENCY_OPTIONS[currency_label]
+
     budget = st.number_input(
-        "💰 Total Budget (INR)",
-        min_value=5000,
-        max_value=1000000,
-        value=50000,
-        step=5000,
-        help="Your total trip budget in Rupees including flights, hotels, food, and activities.",
+        f"💰 Total Budget ({currency['code']})",
+        min_value=100,
+        max_value=10000000,
+        value=50000 if currency["code"] == "INR" else 2500,
+        step=500 if currency["code"] == "INR" else 100,
+        help=f"Your total trip budget in {currency['code']} including flights, hotels, food, and activities.",
     )
 
     start_date = st.date_input(
@@ -127,6 +143,22 @@ with st.sidebar:
         value=5,
         step=1,
         help="How many days is your trip?",
+    )
+
+    interests = st.multiselect(
+        "🎯 Travel Interests",
+        options=[
+            "History & Culture",
+            "Food & Drink",
+            "Adventure & Outdoors",
+            "Nightlife & Entertainment",
+            "Nature & Wildlife",
+            "Shopping",
+            "Art & Museums",
+            "Relaxation & Wellness",
+        ],
+        default=["History & Culture", "Food & Drink"],
+        help="Select your interests so the AI tailors the itinerary to your preferences.",
     )
 
     st.markdown("---")
@@ -145,7 +177,7 @@ if generate_btn:
         st.info(
             f"🤖 **Crew assembled!** Three AI agents are now planning your "
             f"{num_days}-day trip from **{origin}** to **{destination}** "
-            f"with a budget of **₹{budget:,}**."
+            f"with a budget of **{currency['symbol']}{budget:,}**."
         )
 
         with st.spinner("⏳ Agents are researching, calculating, and compiling your itinerary... This may take 1-2 minutes."):
@@ -154,30 +186,45 @@ if generate_btn:
                     origin=origin.strip(),
                     destination=destination.strip(),
                     budget=int(budget),
+                    currency=currency["code"],
+                    currency_symbol=currency["symbol"],
                     start_date=start_date.strftime("%Y-%m-%d"),
                     num_days=int(num_days),
+                    interests=", ".join(interests) if interests else "General sightseeing",
                 )
 
-                st.success("✅ Your itinerary is ready!")
-                st.markdown("---")
-                st.markdown(result)
-
-                # Download button
-                st.download_button(
-                    label="📥 Download Itinerary as Markdown",
-                    data=result,
-                    file_name=f"itinerary_{destination.replace(' ', '_').lower()}.md",
-                    mime="text/markdown",
-                )
+                # Save to session state so it persists across reruns
+                st.session_state["itinerary"] = result
+                st.session_state["destination"] = destination.strip()
 
             except Exception as e:
                 st.error(f"❌ Something went wrong: {e}")
                 st.info(
                     "💡 **Troubleshooting tips:**\n"
-                    "- Make sure your `GROQ_API_KEY` and `SERPER_API_KEY` are set in the `.env` file.\n"
+                    "- Make sure your `GEMINI_API_KEY` and `SERPER_API_KEY` are set in the `.env` file.\n"
                     "- Check that you have an active internet connection.\n"
                     "- Try reducing the number of days if the request is too complex."
                 )
+
+# ── Display Saved Itinerary (persists across reruns) ─────────────────────────
+if "itinerary" in st.session_state:
+    st.success("✅ Your itinerary is ready!")
+    st.markdown("---")
+    st.markdown(st.session_state["itinerary"])
+
+    # Download button — clicking this no longer wipes the itinerary
+    st.download_button(
+        label="📥 Download Itinerary as Markdown",
+        data=st.session_state["itinerary"],
+        file_name=f"itinerary_{st.session_state['destination'].replace(' ', '_').lower()}.md",
+        mime="text/markdown",
+    )
+
+    # Clear button to reset
+    if st.button("🗑️ Clear Itinerary"):
+        del st.session_state["itinerary"]
+        del st.session_state["destination"]
+        st.rerun()
 
 else:
     # Landing state — show instructions

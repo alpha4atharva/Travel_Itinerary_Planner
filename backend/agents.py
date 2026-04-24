@@ -48,6 +48,8 @@ def create_travel_researcher() -> Agent:
         goal=(
             "Research and discover the top attractions, must-try restaurants, "
             "local customs, weather conditions, and hidden gems in {destination}. "
+            "The traveler is interested in: {interests}. "
+            "Tailor your recommendations to match these interests. "
             "Provide practical tips that a real traveler would find invaluable."
         ),
         backstory=(
@@ -78,7 +80,8 @@ def create_logistics_manager() -> Agent:
             "Find 2-3 specific hotels in {destination} for {num_days} days. "
             "You MUST provide the actual names of the airlines/trains and hotels. Do not use generic averages. "
             "Calculate the total estimated cost for travel and accommodation using the CalculatorTool, and "
-            "verify that it stays within the total budget of ₹{budget}. "
+            "verify that it stays within the total budget of {currency_symbol}{budget}. "
+            "All prices must be in {currency} ({currency_symbol}). "
             "If the budget is tight, suggest cheaper alternatives."
         ),
         backstory=(
@@ -106,8 +109,8 @@ def create_itinerary_compiler() -> Agent:
         goal=(
             "Compile all the research about {destination} and the logistics/budget "
             "information into a cohesive, detailed, day-by-day travel itinerary "
-            "for {num_days} days. The itinerary must include a clear cost breakdown "
-            "and stay within the budget of ₹{budget}."
+            "for {num_days} days starting on {start_date}. The itinerary must include a clear cost breakdown "
+            "in {currency} ({currency_symbol}) and stay within the budget of {currency_symbol}{budget}."
         ),
         backstory=(
             "You are an expert travel agent renowned for creating beautiful, "
